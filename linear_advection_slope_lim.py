@@ -6,13 +6,10 @@ import time
 
     
 def get_user_opinion(question):
-    """Funktion die j/n-Abfragen des Benutzers fängt"""
     while True:
         method = input(question)
         if method == "1":
             return "cent_dif"
-            
-            break
         if method == "2":
             return "upwind"
         if method == "3":
@@ -55,8 +52,6 @@ def make_step(use_method,u,timestep):
     
     #u zum neuen Zeitschritt ausrechnen
     u_new=np.zeros_like(u)
-    F = np.zeros_like(u)
-    
     
     if use_method == "cent_dif":
         for i in range (1,N+1):
@@ -64,11 +59,9 @@ def make_step(use_method,u,timestep):
         return u_new
         
     
-    if use_method == "upwind": 
-        for i in range(1,N+1):
-            F[i] = u[i-1]    
-        for j in range (2,N):
-            u_new[j] = u[j] - timestep/delta_x*(F[j+1]-F[j])       
+    if use_method == "upwind":  
+        for i in range (1,N+1):
+            u_new[i] = u[i] - timestep/delta_x*(u[i]-u[i-1])       
         return u_new
     
     
@@ -88,9 +81,6 @@ def make_step(use_method,u,timestep):
         return u_new     
     
     
-    
-    
-
         
 def make_steps(use_method, u,timestep,max_time):
     time_passed = 0
@@ -135,7 +125,3 @@ n = 1000
 plot_grid(analytical_sol(max_time,n),np.linspace(-1,1,n),label="Analytical")
 plt.legend()
 plt.show()
-
-
-
-
